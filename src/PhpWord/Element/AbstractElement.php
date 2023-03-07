@@ -305,7 +305,8 @@ abstract class AbstractElement
     public function setCommentRangeStart(Comment $value): void
     {
         if ($this instanceof Comment) {
-            throw new InvalidArgumentException('Cannot set a Comment on a Comment');
+            $this->reply = $value;
+            return;
         }
         $this->commentRangeStart = $value;
         $this->commentRangeStart->setStartElement($this);

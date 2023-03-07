@@ -128,6 +128,14 @@ abstract class AbstractElement
             }
 
             $this->xmlWriter->writeElementBlock('w:commentRangeStart', ['w:id' => $comment->getElementId()]);
+
+            while ($reply = $comment->reply) {
+                if ($reply->getElementId() === null) {
+                    $reply->setElementId();
+                }
+                $this->xmlWriter->writeElementBlock('w:commentRangeStart', ['w:id' => $reply->getElementId()]);
+                $comment = $reply;
+            }
         }
     }
 
@@ -158,6 +166,18 @@ abstract class AbstractElement
             $this->xmlWriter->startElement('w:r');
             $this->xmlWriter->writeElementBlock('w:commentReference', ['w:id' => $comment->getElementId()]);
             $this->xmlWriter->endElement();
+        }
+        if ($comment) {
+            while ($reply = $comment->reply) {
+                if ($reply->getElementId() === null) {
+                    $reply->setElementId();
+                }
+                $this->xmlWriter->writeElementBlock('w:commentRangeEnd', ['w:id' => $reply->getElementId()]);
+                $this->xmlWriter->startElement('w:r');
+                $this->xmlWriter->writeElementBlock('w:commentReference', ['w:id' => $reply->getElementId()]);
+                $this->xmlWriter->endElement();
+                $comment = $reply;
+            }
         }
     }
 

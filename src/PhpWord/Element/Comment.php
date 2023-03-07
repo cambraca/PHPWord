@@ -55,6 +55,11 @@ class Comment extends TrackChange
     protected $collectionRelation = true;
 
     /**
+     * @var Comment
+     */
+    public $reply = null;
+
+    /**
      * Create a new Comment Element.
      *
      * @param string $author
